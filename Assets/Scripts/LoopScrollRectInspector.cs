@@ -9,12 +9,12 @@ public class LoopScrollRectInspector : Editor
 	public override void OnInspectorGUI ()
 	{
 		LoopScrollRect scroll = (LoopScrollRect)target;
-		LoopScrollRectStandardOnInspectorGUI(scroll);
+		LoopScrollRectOnInspectorGUI(scroll);
 
 		base.OnInspectorGUI ();
 	}
 
-	public static void LoopScrollRectStandardOnInspectorGUI(LoopScrollRect scroll)
+	public static void LoopScrollRectOnInspectorGUI(LoopScrollRect scroll)
 	{
 		scroll.initInStart = EditorGUILayout.Toggle("Init in Start", scroll.initInStart);
 		scroll.prefabPool = (MarchingBytes.EasyObjectPool)EditorGUILayout.ObjectField("Prefab Pool", scroll.prefabPool, typeof(MarchingBytes.EasyObjectPool), true);
@@ -34,7 +34,7 @@ public class LoopScrollRectInspector : Editor
 		EditorGUILayout.EndHorizontal();
 	}
 
-	public static void ScrollRectStandardOnInspectorGUI(LoopScrollRect scroll)
+	public static void ScrollRectOnInspectorGUI(LoopScrollRect scroll)
 	{
 		scroll.content = (RectTransform)EditorGUILayout.ObjectField("Content", scroll.content, typeof(RectTransform), true);
 		scroll.movementType = (LoopScrollRect.MovementType)EditorGUILayout.EnumPopup("Movement Type", (System.Enum)scroll.movementType);
@@ -43,6 +43,14 @@ public class LoopScrollRectInspector : Editor
 		scroll.decelerationRate = EditorGUILayout.FloatField("Deceleration Rate", scroll.decelerationRate);
 		scroll.scrollSensitivity = EditorGUILayout.FloatField("Scroll Sensitivity", scroll.scrollSensitivity);
 		scroll.viewport = (RectTransform)EditorGUILayout.ObjectField("Viewport", scroll.viewport, typeof(RectTransform), true);
+	}
+
+	public static void ScrollScrolIndexEventGUI(SerializedObject serializedObject)
+	{
+		SerializedProperty onScrollCellIndex = serializedObject.FindProperty("onScrollCellIndex");
+		EditorGUILayout.PropertyField(onScrollCellIndex);
+		if(GUI.changed)
+			serializedObject.ApplyModifiedProperties();
 	}
 }
 #endif

@@ -26,7 +26,18 @@ namespace UnityEngine.UI
         [HideInInspector]
         public bool reverseDirection = false;
 
-        protected int itemTypeStart = 0;
+		/// <summary>
+		/// Replacement for SendMessage, not only allows multiple Monobehaviours to listen but also allows multiple methods in one class to listen.
+		/// Means slightly more ground work (more code, script needs to be separated from prefab, etc) but for the increased clarity and flexibility seems a fair tradeoff.
+		/// </summary>
+		public ScrollCellIndexEvent onScrollCellIndex;
+
+		[Serializable]
+		public class ScrollCellIndexEvent : UnityEvent<GameObject, int>
+		{
+		}
+
+		protected int itemTypeStart = 0;
         protected int itemTypeEnd = 0;
 
         protected abstract float GetSize(RectTransform item);
@@ -306,7 +317,7 @@ namespace UnityEngine.UI
                     }
                     else
                     {
-                        content.GetChild(i).SendMessage("ScrollCellIndex", itemTypeEnd);
+						onScrollCellIndex.Invoke(content.GetChild(i).gameObject, itemTypeEnd);
                         itemTypeEnd++;
                     }
                 }
@@ -447,8 +458,8 @@ namespace UnityEngine.UI
             RectTransform nextItem = prefabPool.GetObjectFromPool(prefabPoolName).GetComponent<RectTransform>();
             nextItem.transform.SetParent(content, false);
             nextItem.gameObject.SetActive(true);
-            nextItem.SendMessage("ScrollCellIndex", itemIdx);
-            return nextItem;
+			onScrollCellIndex.Invoke(nextItem.gameObject, itemIdx);
+			return nextItem;
         }
         //==========LoopScrollRect==========
 

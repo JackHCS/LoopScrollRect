@@ -4,13 +4,9 @@ using System.Collections;
 
 public class ScrollIndexCallback3 : MonoBehaviour
 {
-    public Text text;
-    void ScrollCellIndex(int idx)
-    {
-        string name = "Cell " + idx.ToString();
-        if (text != null)
-        {
-            text.text = name;
-        }
-    }
+	public void ScrollCellIndex(GameObject gameObject, int idx)
+	{
+		ScrollIndexObject3 script = gameObject.GetComponent<ScrollIndexObject3>();
+		script.OnScrollCellIndex(idx);
+	}
 }
